@@ -24,20 +24,15 @@ public class PokemonController {
     }
 
     @GetMapping("pokemons")
-    public ResponseEntity<List<Pokemon>> getPokemons(){
-        List<Pokemon> pokemons = new ArrayList<>();
+    public ResponseEntity<List<PokemonDto>> getPokemons(){
 
-        pokemons.add(new Pokemon(1, "Pikachu", "Electric"));
-        pokemons.add(new Pokemon(1, "Squirtle", "Water"));
-        pokemons.add(new Pokemon(1, "Charmanded", "Fire"));
-
-        return ResponseEntity.ok(pokemons);
+        return ResponseEntity.ok(pokemonService.getAllPokemons());
     }
 
     @GetMapping("pokemon/{id}")
-    public ResponseEntity<Pokemon> getPokemonById(@PathVariable int id) {
+    public ResponseEntity<PokemonDto> getPokemonById(@PathVariable Long id) {
 
-        return ResponseEntity.ok(new Pokemon(id, "Bulbasurus", "Earth"));
+        return ResponseEntity.ok(pokemonService.getPokemonById(id));
     }
 
 //    POST API END POINT
@@ -52,8 +47,10 @@ public class PokemonController {
 
 //    PUT
     @PutMapping("pokemon/update/{id}")
-    public ResponseEntity<Pokemon> updatePokemon(@RequestBody Pokemon pokemon, @PathVariable("id") int pokemonId){
-        return ResponseEntity.ok(pokemon);
+    public ResponseEntity<PokemonDto> updatePokemon(@RequestBody PokemonDto pokemonDto, @PathVariable("id") Long pokemonId){
+        PokemonDto response = pokemonService.updatePokemon(pokemonDto, pokemonId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 //    DELETE
