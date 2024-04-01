@@ -1,7 +1,6 @@
 package com.example.api.controllers;
 
 import com.example.api.dto.PokemonDto;
-import com.example.api.model.Pokemon;
 import com.example.api.services.PokemonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +25,7 @@ public class PokemonController {
     @GetMapping("pokemons")
     public ResponseEntity<List<PokemonDto>> getPokemons(){
 
+
         return ResponseEntity.ok(pokemonService.getAllPokemons());
     }
 
@@ -39,8 +39,6 @@ public class PokemonController {
     @PostMapping("pokemon/create")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<PokemonDto> createPokemon(@RequestBody PokemonDto pokemonDto){
-        System.out.println(pokemonDto.getName());
-        System.out.println(pokemonDto.getType());
         return new ResponseEntity<>(pokemonService.createPokemon(pokemonDto), HttpStatus.CREATED);
     }
 
@@ -55,9 +53,10 @@ public class PokemonController {
 
 //    DELETE
     @DeleteMapping("pokemon/delete/{id}")
-    public ResponseEntity<String> deletePokemon(@PathVariable("id") int pokemonId){
-        System.out.println(pokemonId);
+    public ResponseEntity<String> deletePokemon(@PathVariable("id") Long pokemonId){
 
-        return ResponseEntity.ok("Pokemon deleted successfully");
+        pokemonService.deletePokemonId(pokemonId);
+
+        return new ResponseEntity<>("Pokemon deleted", HttpStatus.OK);
     }
 }

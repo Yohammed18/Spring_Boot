@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @Service
 public class PokemonServiceImpl implements PokemonService {
 
-
     PokemonRepository pokemonRepository;
 
     @Autowired
@@ -43,19 +42,6 @@ public class PokemonServiceImpl implements PokemonService {
     @Override
     public List<PokemonDto> getAllPokemons() {
         List<Pokemon> pokemons = pokemonRepository.findAll();
-        List<PokemonDto> pokemonDtos = new ArrayList<>();
-
-
-//        for (int i = 0; i < pokemons.size(); i++) {
-//            PokemonDto pokemonDto = new PokemonDto();
-//            pokemonDto.setId(pokemons.get(i).getId());
-//            pokemonDto.setName(pokemons.get(i).getName());
-//            pokemonDto.setType(pokemons.get(i).getType());
-//            pokemonDtos.add(pokemonDto);
-//        }
-//        return pokemonDtos;
-
-
         return pokemons.stream().map(p -> mapToDto(p)).collect(Collectors.toList());
     }
 
@@ -78,6 +64,13 @@ public class PokemonServiceImpl implements PokemonService {
         Pokemon updatePokemon = pokemonRepository.save(pokemon);
 
         return mapToDto(updatePokemon);
+    }
+
+    @Override
+    public void deletePokemonId(Long id) {
+        Pokemon pokemon = pokemonRepository.findById(id).orElseThrow(() -> new PokemonNotFoundException("Pokemon could not be deleted"));
+        pokemonRepository.delete(pokemon);
+
     }
 
     //    CREATE MAPPER
